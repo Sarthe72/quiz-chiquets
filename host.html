@@ -326,5 +326,30 @@ function resetGame() {
   db.ref('/').set({ game: { status: 'waiting', questionIndex: 0 }, players: {} });
 }
 </script>
+
+<!-- Audio fond musical -->
+<audio id="bg-music" src="gymtonic.mp3" loop></audio>
+
+<!-- Bouton mute flottant -->
+<button id="music-btn" onclick="toggleMusic()" style="
+  position:fixed; bottom:18px; right:18px;
+  background:rgba(255,255,255,.12); border:none; border-radius:50%;
+  width:48px; height:48px; font-size:1.4rem; cursor:pointer;
+  color:#fff;" title="Musique">🎵</button>
+
+<script>
+  const music = document.getElementById('bg-music');
+  let muted = false;
+
+  document.addEventListener('click', () => {
+    if (music.paused && !muted) music.play().catch(() => {});
+  }, { once: true });
+
+  function toggleMusic() {
+    muted = !muted;
+    music.muted = muted;
+    document.getElementById('music-btn').textContent = muted ? '🔇' : '🎵';
+  }
+</script>
 </body>
 </html>

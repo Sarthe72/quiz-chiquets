@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Quizz Chiquet's – Écran Hôte</title>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="questions.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0d0d1a;
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* ── screens ── */
+    .screen { display: none; width: 100%; max-width: 1100px; padding: 24px; flex-direction: column; align-items: center; }
+    .screen.active { display: flex; }
+
+    /* ── lobby ── */
+    .logo { font-size: 3rem; font-weight: 900; color: #fbbf24; letter-spacing: -1px; margin-bottom: 6px; }
+    .subtitle { color: rgba(255,255,255,.5); font-size: 1rem; margin-bottom: 30px; }
+    .lobby-grid { display: grid; grid-template-columns: auto 1fr; gap: 30px; align-items: start; width: 100%; }
+    #qrcode { background: white; padding: 10px; border-radius: 10px; }
+    .lobby-right { display: flex; flex-direction: column; gap: 12px; }
+    .join-label { font-size: 0.85rem; color: rgba(255,255,255,.5); text-transform: uppercase; letter-spacing: 1px; }
+    .join-url { font-size: 1.05rem; background: rgba(255,255,255,.1); padding: 10px 16px; border-radius: 8px; word-break: break-all; }
+    .players-wrap { background: rgba(255,255,255,.06); border-radius: 12px; padding: 14px; min-height: 80px; }
+    .players-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip { background: rgba(255,255,255,.15); padding: 6px 14px; border-radius: 20px; font-size: .9rem; }
+    .player-count { color: rgba(255,255,255,.4); font-size: .85rem; margin-top: 8px; }
+
+    /* ── buttons ── */
+    .btn { padding: 13px 36px; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin: 6px; transition: opacity .15s; }
+    .btn:hover { opacity: .88; }
+    .btn-start { background: #22c55e; color: #fff; font-size: 1.3rem; padding: 16px 50px; }
+    .btn-next  { background: #3b82f6; color: #fff; }
+    .btn-reset { background: #ef4444; color: #fff; font-size: .85rem; padding: 9px 20px; }
+
+    /* ── question screen ── */
+    .q-meta { font-size: .9rem; color: rgba(255,255,255,.4); margin-bottom: 8px; }
+    .timer-row { display: flex; align-items: center; gap: 16px; width: 100%; max-width: 900px; margin-bottom: 20px; }
+    .timer-num { font-size: 2.8rem; font-weight: 900; color: #fbbf24; min-width: 64px; text-align: center; }
+    .timer-bar { flex: 1; height: 12px; background: rgba(255,255,255,.15); border-radius: 6px; overflow: hidden; }
+    .timer-fill { height: 100%; background: #fbbf24; border-radius: 6px; transition: width .1s linear; }
+    .question-txt { font-size: 2rem; font-weight: 700; text-align: center; margin-bottom: 28px; max-width: 900px; line-height: 1.3; }
+    .answers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; width: 100%; max-width: 900px; }
+    .tile { padding: 22px 18px; border-radius: 14px; font-size: 1.3rem; font-weight: 600; text-align: center; line-height: 1.3; }
+    .tile.A { background: #ef4444; }
+    .tile.B { background: #3b82f6; }
+    .tile.C { background: #f59e0b; }
+    .tile.D { background: #22c55e; }
+    .tile.wrong   { opacity: .25; }
+    .tile.correct { outline: 4px solid #fff; transform: scale(1.03); }
+    .answered-info { margin-top: 14px; font-size: 1rem; color: rgba(255,255,255,.5); }
+
+    /* ── reveal ── */
+    .reveal-stats { display: flex; gap: 24px; font-size: 1.1rem; margin: 16px 0 20px; }
+    .stat-ok   { color: #22c55e; }
+    .stat-bad  { color: #ef4444; }
+    .stat-miss { color: #6b7280; }
+    .correct-names { color: rgba(255,255,255,.65); font-size: .95rem; margin-bottom: 20px; }
+
+    /* ── leaderboard ── */
+    .lb { width: 100%; max-width: 640px; }
+    .lb-item { display: flex; align-items: center; gap: 14px; padding: 12px 18px; margin: 7px 0; background: rgba(255,255,255,.08); border-radius: 10px; font-size: 1.15rem; }
+    .lb-rank { width: 36px; text-align: center; font-size: 1.3rem; }
+    .lb-name { flex: 1; }
+    .lb-score { font-weight: 700; color: #fbbf24; }
+    .lb-item.r1 { background: rgba(255,215,0,.18); border-left: 4px solid gold; }
+    .lb-item.r2 { background: rgba(192,192,192,.15); border-left: 4px solid silver; }
+    .lb-item.r3 { background: rgba(205,127,50,.15); border-left: 4px solid #cd7f32; }
+  </style>
+</head>
+<body>
+
+<!-- ══ LOBBY ══ -->
+<div id="screen-lobby" class="screen active">
+  <div class="logo">🎉 Quizz Chiquet's</div>
+  <div class="subtitle">Projette cet écran — les joueurs rejoignent sur leur téléphone</div>
+  <div class="lobby-grid">
+    <div id="qrcode"></div>
+    <div class="lobby-right">
+      <div class="join-label">Lien joueur</div>
+      <div class="join-url" id="join-url">…</div>
+      <div class="players-wrap">
+        <div class="join-label" style="margin-bottom:8px">Joueurs connectés</div>
+        <div class="players-grid" id="players-chips"></div>
+        <div class="player-count" id="player-count">0 joueur(s)</div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:24px; display:flex; align-items:center; gap:10px;">
+    <button class="btn btn-start" onclick="startQuiz()">▶ Démarrer le Quiz</button>
+    <button class="btn btn-reset" onclick="resetGame()">↺ Réinitialiser</button>
+  </div>
+</div>
+
+<!-- ══ QUESTION ══ -->
+<div id="screen-question" class="screen">
+  <div class="q-meta" id="q-meta"></div>
+  <div class="timer-row">
+    <div class="timer-num" id="timer-num">20</div>
+    <div class="timer-bar"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div>
+  </div>
+  <div class="question-txt" id="q-text"></div>
+  <div class="answers-grid" id="answers-grid"></div>
+  <div class="answered-info" id="answered-info"></div>
+</div>
+
+<!-- ══ REVEAL ══ -->
+<div id="screen-reveal" class="screen">
+  <div class="question-txt" id="reveal-q" style="font-size:1.6rem; margin-bottom:14px"></div>
+  <div class="answers-grid" id="reveal-answers" style="max-width:900px; width:100%"></div>
+  <div class="reveal-stats" id="reveal-stats"></div>
+  <div class="correct-names" id="correct-names"></div>
+  <button class="btn btn-next" id="btn-next" onclick="nextQuestion()">Suivant ➜</button>
+</div>
+
+<!-- ══ LEADERBOARD ══ -->
+<div id="screen-end" class="screen">
+  <div class="logo" style="margin-bottom:20px; font-size:2rem">🏆 Classement Final — Quizz Chiquet's</div>
+  <div class="lb" id="leaderboard"></div>
+  <button class="btn btn-reset" onclick="resetGame()" style="margin-top:28px">↺ Rejouer</button>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  FIREBASE CONFIG — Colle ici ta config Firebase
+// ═══════════════════════════════════════════════════════
+const firebaseConfig = {
+  apiKey:            "AIzaSyAjqdOHwjElcJ7GI6f_RKHbVcsaj5THHhg",
+  authDomain:        "quiz-chiquets.firebaseapp.com",
+  databaseURL:       "https://quiz-chiquets-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:         "quiz-chiquets",
+  storageBucket:     "quiz-chiquets.firebasestorage.app",
+  messagingSenderId: "615486087207",
+  appId:             "1:615486087207:web:0ea7fa5fa545f56746ee02"
+};
+// ═══════════════════════════════════════════════════════
+
+firebase.initializeApp(firebaseConfig);
+const db         = firebase.database();
+const gameRef    = db.ref('game');
+const playersRef = db.ref('players');
+
+let currentPlayers = {};
+let currentGame    = null;
+let timerInterval  = null;
+
+// ── QR Code & player URL ──────────────────────────────
+const playerUrl = window.location.href.replace('host.html', 'index.html');
+document.getElementById('join-url').textContent = playerUrl;
+new QRCode(document.getElementById('qrcode'), {
+  text: playerUrl, width: 160, height: 160,
+  colorDark: '#000', colorLight: '#fff'
+});
+
+// ── Realtime listeners ────────────────────────────────
+playersRef.on('value', snap => {
+  currentPlayers = snap.val() || {};
+  refreshPlayerUI();
+});
+
+gameRef.on('value', snap => {
+  currentGame = snap.val();
+  if (!currentGame) return;
+  if      (currentGame.status === 'waiting')  showScreen('lobby');
+  else if (currentGame.status === 'question') showQuestionScreen(currentGame);
+  else if (currentGame.status === 'reveal')   showRevealScreen(currentGame);
+  else if (currentGame.status === 'end')      showEndScreen();
+});
+
+function refreshPlayerUI() {
+  const list  = Object.values(currentPlayers);
+  const chips = document.getElementById('players-chips');
+  const count = document.getElementById('player-count');
+  if (chips) chips.innerHTML = list.map(p => `<div class="chip">${p.name}</div>`).join('');
+  if (count) count.textContent = `${list.length} joueur(s)`;
+
+  if (currentGame && currentGame.status === 'question') {
+    const qi       = currentGame.questionIndex;
+    const answered = list.filter(p => p.answers && p.answers[qi] !== undefined).length;
+    const el = document.getElementById('answered-info');
+    if (el) el.textContent = `${answered} / ${list.length} ont répondu`;
+  }
+}
+
+// ── Screens ───────────────────────────────────────────
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+}
+
+// ── Start / next ──────────────────────────────────────
+function startQuiz() {
+  if (!confirm('Démarrer le quiz ?')) return;
+  launchQuestion(0);
+}
+
+function launchQuestion(index) {
+  clearInterval(timerInterval);
+  const timerEnd = Date.now() + QUIZ_CONFIG.timerSeconds * 1000;
+  gameRef.set({ status: 'question', questionIndex: index, timerEnd });
+}
+
+// ── Question screen ───────────────────────────────────
+function showQuestionScreen(game) {
+  showScreen('question');
+  clearInterval(timerInterval);
+  const q      = QUESTIONS[game.questionIndex];
+  const labels = ['A','B','C','D'];
+  document.getElementById('q-meta').textContent   = `Question ${game.questionIndex + 1} / ${QUESTIONS.length}`;
+  document.getElementById('q-text').textContent   = q.question;
+  document.getElementById('answered-info').textContent = '';
+  document.getElementById('answers-grid').innerHTML = q.options.map((opt, i) =>
+    `<div class="tile ${labels[i]}">${labels[i]}. ${opt}</div>`
+  ).join('');
+  startTimer(game.timerEnd, () => {
+    // Auto-reveal when timer ends
+    gameRef.once('value', s => {
+      const g = s.val();
+      if (g && g.status === 'question' && g.questionIndex === game.questionIndex)
+        gameRef.update({ status: 'reveal' });
+    });
+  });
+}
+
+// ── Timer ─────────────────────────────────────────────
+function startTimer(timerEnd, onEnd) {
+  const total = QUIZ_CONFIG.timerSeconds * 1000;
+  timerInterval = setInterval(() => {
+    const rem  = Math.max(0, timerEnd - Date.now());
+    const secs = Math.ceil(rem / 1000);
+    const pct  = (rem / total) * 100;
+    const nd = document.getElementById('timer-num');
+    const bf = document.getElementById('timer-fill');
+    if (nd) nd.textContent    = secs;
+    if (bf) bf.style.width    = pct + '%';
+    if (bf) bf.style.background = pct > 40 ? '#fbbf24' : pct > 20 ? '#f97316' : '#ef4444';
+    if (rem === 0) { clearInterval(timerInterval); onEnd(); }
+  }, 100);
+}
+
+// ── Reveal screen ─────────────────────────────────────
+function showRevealScreen(game) {
+  clearInterval(timerInterval);
+  showScreen('reveal');
+  const q      = QUESTIONS[game.questionIndex];
+  const labels = ['A','B','C','D'];
+  document.getElementById('reveal-q').textContent = q.question;
+  document.getElementById('reveal-answers').innerHTML = q.options.map((opt, i) =>
+    `<div class="tile ${labels[i]} ${i === q.correct ? 'correct' : 'wrong'}">
+      ${i === q.correct ? '✓ ' : ''}${labels[i]}. ${opt}
+    </div>`
+  ).join('');
+  const isLast = game.questionIndex >= QUESTIONS.length - 1;
+  document.getElementById('btn-next').textContent = isLast ? 'Voir le classement 🏆' : 'Suivant ➜';
+
+  // Score once per question via transaction
+  const qi = game.questionIndex;
+  gameRef.child(`scored/${qi}`).transaction(val => val ? undefined : true, (err, committed) => {
+    if (!committed) return;
+    const players  = currentPlayers;
+    const total    = QUIZ_CONFIG.timerSeconds * 1000;
+    const updates  = {};
+    let ok = 0, bad = 0, miss = 0;
+    const winners  = [];
+    Object.entries(players).forEach(([uid, p]) => {
+      const ans = p.answers ? p.answers[qi] : undefined;
+      if (ans === undefined) { miss++; return; }
+      if (ans !== q.correct) { bad++;  return; }
+      ok++;
+      winners.push(p.name);
+      // Time-based score: proportion of time remaining when they answered
+      const elapsed = (p.answerTime && p.answerTime[qi]) || total;
+      const ratio   = Math.max(0, Math.min(1, 1 - elapsed / total));
+      const pts     = Math.round(QUIZ_CONFIG.minPoints + ratio * (QUIZ_CONFIG.maxPoints - QUIZ_CONFIG.minPoints));
+      updates[`players/${uid}/score`] = (p.score || 0) + pts;
+    });
+    if (Object.keys(updates).length) db.ref('/').update(updates);
+    document.getElementById('reveal-stats').innerHTML = `
+      <span class="stat-ok">✓ ${ok} bonne(s)</span>
+      <span class="stat-bad">✗ ${bad} fausse(s)</span>
+      <span class="stat-miss">— ${miss} sans réponse</span>`;
+    document.getElementById('correct-names').textContent =
+      winners.length ? '👏 ' + winners.join(', ') : '';
+  });
+}
+
+// ── Next question ─────────────────────────────────────
+function nextQuestion() {
+  gameRef.once('value', s => {
+    const g = s.val();
+    const next = g.questionIndex + 1;
+    if (next >= QUESTIONS.length) gameRef.update({ status: 'end' });
+    else launchQuestion(next);
+  });
+}
+
+// ── End screen ────────────────────────────────────────
+function showEndScreen() {
+  clearInterval(timerInterval);
+  showScreen('end');
+  const medals = ['🥇','🥈','🥉'];
+  const sorted = Object.values(currentPlayers).sort((a,b) => (b.score||0) - (a.score||0));
+  document.getElementById('leaderboard').innerHTML = sorted.map((p, i) => `
+    <div class="lb-item ${i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : ''}">
+      <span class="lb-rank">${medals[i] || (i+1)}</span>
+      <span class="lb-name">${p.name}</span>
+      <span class="lb-score">${p.score || 0} pts</span>
+    </div>`).join('');
+}
+
+// ── Reset ─────────────────────────────────────────────
+function resetGame() {
+  if (!confirm('Réinitialiser ? Tous les scores seront effacés.')) return;
+  db.ref('/').set({ game: { status: 'waiting', questionIndex: 0 }, players: {} });
+}
+</script>
+</body>
+</html>

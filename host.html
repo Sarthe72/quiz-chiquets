@@ -98,8 +98,9 @@
       </div>
     </div>
   </div>
-  <div style="margin-top:24px; display:flex; align-items:center; gap:10px;">
+  <div style="margin-top:24px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:center;">
     <button class="btn btn-start" onclick="startQuiz()">▶ Démarrer le Quiz</button>
+    <button class="btn" id="music-toggle-btn" onclick="toggleMusic()" style="background:#7c3aed; color:#fff;">🎵 Lancer la musique</button>
     <button class="btn btn-reset" onclick="resetGame()">↺ Réinitialiser</button>
   </div>
 </div>
@@ -339,16 +340,23 @@ function resetGame() {
 
 <script>
   const music = document.getElementById('bg-music');
-  let muted = false;
-
-  document.addEventListener('click', () => {
-    if (music.paused && !muted) music.play().catch(() => {});
-  }, { once: true });
+  let musicOn = false;
 
   function toggleMusic() {
-    muted = !muted;
-    music.muted = muted;
-    document.getElementById('music-btn').textContent = muted ? '🔇' : '🎵';
+    if (!musicOn) {
+      music.play().then(() => {
+        musicOn = true;
+        document.getElementById('music-btn').textContent = '🔇';
+        const btn = document.getElementById('music-toggle-btn');
+        if (btn) { btn.textContent = '🔇 Couper la musique'; btn.style.background = '#374151'; }
+      }).catch(() => {});
+    } else {
+      music.pause();
+      musicOn = false;
+      document.getElementById('music-btn').textContent = '🎵';
+      const btn = document.getElementById('music-toggle-btn');
+      if (btn) { btn.textContent = '🎵 Lancer la musique'; btn.style.background = '#7c3aed'; }
+    }
   }
 </script>
 </body>

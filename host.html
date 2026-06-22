@@ -46,11 +46,11 @@
     /* ── lobby ── */
     .logo { font-size: 3rem; font-weight: 900; color: #fbbf24; letter-spacing: -1px; margin-bottom: 6px; }
     .subtitle { color: rgba(255,255,255,.5); font-size: 1rem; margin-bottom: 30px; }
-    .lobby-grid { display: grid; grid-template-columns: auto 1fr; gap: 30px; align-items: start; width: 100%; }
-    #qrcode { background: white; padding: 10px; border-radius: 10px; }
-    .lobby-right { display: flex; flex-direction: column; gap: 12px; }
+    .lobby-grid { display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; }
+    #qrcode { background: white; padding: 14px; border-radius: 14px; }
+    #qrcode img, #qrcode canvas { display: block; }
     .join-label { font-size: 0.85rem; color: rgba(255,255,255,.5); text-transform: uppercase; letter-spacing: 1px; }
-    .join-url { font-size: 1.05rem; background: rgba(255,255,255,.1); padding: 10px 16px; border-radius: 8px; word-break: break-all; }
+    .join-url { display: none; }
     .players-wrap { background: rgba(255,255,255,.06); border-radius: 12px; padding: 14px; min-height: 80px; }
     .players-grid { display: flex; flex-wrap: wrap; gap: 8px; }
     .chip { background: rgba(255,255,255,.15); padding: 6px 14px; border-radius: 20px; font-size: .9rem; }
@@ -108,19 +108,15 @@
 <!-- ══ LOBBY ══ -->
 <div id="screen-lobby" class="screen active">
   <div class="logo">🎉 Quizz Chiquet's</div>
-  <div class="subtitle">Projette cet écran — les joueurs rejoignent sur leur téléphone</div>
   <div class="lobby-grid">
     <div id="qrcode"></div>
-    <div class="lobby-right">
-      <div class="join-label">Lien joueur</div>
-      <div class="join-url" id="join-url">…</div>
-      <div class="players-wrap">
-        <div class="join-label" style="margin-bottom:8px">Joueurs connectés</div>
-        <div class="players-grid" id="players-chips"></div>
-        <div class="player-count" id="player-count">0 joueur(s)</div>
-      </div>
+    <div class="players-wrap" style="width:100%; max-width:600px;">
+      <div class="join-label" style="margin-bottom:8px">Joueurs connectés</div>
+      <div class="players-grid" id="players-chips"></div>
+      <div class="player-count" id="player-count">0 joueur(s)</div>
     </div>
   </div>
+  <div id="join-url" style="display:none">…</div>
   <div style="margin-top:24px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:center;">
     <button class="btn btn-start" onclick="startQuiz()">▶ Démarrer le Quiz</button>
     <button class="btn" id="music-toggle-btn" onclick="toggleMusic()" style="background:#7c3aed; color:#fff;">🎵 Lancer la musique</button>
@@ -184,7 +180,7 @@ let timerInterval  = null;
 const playerUrl = window.location.href.replace('host.html', 'index.html');
 document.getElementById('join-url').textContent = playerUrl;
 new QRCode(document.getElementById('qrcode'), {
-  text: playerUrl, width: 160, height: 160,
+  text: playerUrl, width: 260, height: 260,
   colorDark: '#000', colorLight: '#fff'
 });
 

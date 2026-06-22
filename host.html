@@ -289,27 +289,34 @@ function showRevealScreen(game) {
   const qi = game.questionIndex;
   gameRef.child(`scored/${qi}`).transaction(val => val ? undefined : true, (err, committed) => {
     if (!committed) return;
-    const players  = currentPlayers;
-    const total    = QUIZ_CONFIG.timerSeconds * 1000;
-    const updates  = {};
-    let ok = 0, bad = 0, miss = 0;
-    const winners  = [];
+    const players = currentPlayers;
+    const updates = {};
+
+    // Sépare corrects et incorrects, trie les corrects par vitesse
+    const correct = [];
     Object.entries(players).forEach(([uid, p]) => {
       const ans = p.answers ? p.answers[qi] : undefined;
-      if (ans === undefined) { miss++; return; }
-      if (ans !== q.correct) { bad++;  return; }
-      ok++;
-      winners.push(p.name);
-      // Time-based score: proportion of time remaining when they answered
-      const elapsed = (p.answerTime && p.answerTime[qi]) || total;
-      const ratio   = Math.max(0, Math.min(1, 1 - elapsed / total));
-      const pts     = Math.round(QUIZ_CONFIG.minPoints + ratio * (QUIZ_CONFIG.maxPoints - QUIZ_CONFIG.minPoints));
-      updates[`players/${uid}/score`] = (p.score || 0) + pts;
+      if (ans === q.correct) {
+        correct.push({ uid, p, elapsed: (p.answerTime && p.answerTime[qi]) || 99999 });
+      }
+    });
+    correct.sort((a, b) => a.elapsed - b.elapsed);
+
+    // Attribution des points
+    correct.forEach(({ uid, p }, rank) => {
+      const bonus = rank < QUIZ_CONFIG.bonusCount ? QUIZ_CONFIG.pointsBonus : 0;
+      updates[`players/${uid}/score`] = (p.score || 0) + QUIZ_CONFIG.pointsCorrect + bonus;
     });
     if (Object.keys(updates).length) db.ref('/').update(updates);
+
+    // Affiche les 3 plus rapides
+    const top3 = correct.slice(0, QUIZ_CONFIG.bonusCount);
+    const medals = ['🥇', '🥈', '🥉'];
+    document.getElementById('correct-names').innerHTML = top3.length
+      ? '<strong style="color:#fbbf24">⚡ Plus rapides :</strong> ' +
+        top3.map((e, i) => `${medals[i]} ${e.p.name}`).join('  ')
+      : '';
     document.getElementById('reveal-stats').innerHTML = '';
-    document.getElementById('correct-names').textContent =
-      winners.length ? '👏 ' + winners.join(', ') : '';
   });
 }
 

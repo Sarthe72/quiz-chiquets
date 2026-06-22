@@ -5,8 +5,9 @@
 
 const QUIZ_CONFIG = {
   timerSeconds: 15,
-  maxPoints: 1000,   // points si réponse immédiate
-  minPoints: 500     // points minimum si réponse en toute fin de chrono
+  pointsCorrect: 1,   // point pour bonne réponse
+  pointsBonus: 1,     // bonus pour les 3 plus rapides
+  bonusCount: 3       // nombre de joueurs qui reçoivent le bonus
 };
 
 const QUESTIONS = [

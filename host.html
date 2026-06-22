@@ -125,6 +125,15 @@
 </div>
 
 <!-- ══ QUESTION ══ -->
+<!-- ══ INTRO ══ -->
+<div id="screen-intro" class="screen" style="padding:0; position:relative; width:100vw; height:100vh; overflow:hidden;">
+  <img src="photos/intro.jpg" style="width:100%; height:100%; object-fit:contain; display:block;">
+  <div style="position:absolute; top:0; left:0; right:0; text-align:center; padding:40px 20px;">
+    <span style="font-size:6rem; font-weight:900; color:#fff; text-shadow:0 4px 24px rgba(0,0,0,.9); letter-spacing:-2px;">Prêt au</span>
+  </div>
+</div>
+
+<!-- ══ QUESTION ══ -->
 <div id="screen-question" class="screen">
   <div class="q-meta" id="q-meta"></div>
   <div class="timer-row">
@@ -223,7 +232,8 @@ function showScreen(name) {
 // ── Start / next ──────────────────────────────────────
 function startQuiz() {
   if (!confirm('Démarrer le quiz ?')) return;
-  launchQuestion(0);
+  showScreen('intro');
+  setTimeout(() => launchQuestion(0), 4000);
 }
 
 function launchQuestion(index) {

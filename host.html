@@ -12,9 +12,12 @@
 
     /* ── slideshow background ── */
     .bg-layer {
-      position: fixed; inset: 0;
-      background-size: cover; background-position: center;
-      transition: opacity 1.5s ease;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      transition: opacity 2s ease;
       z-index: 0;
     }
     .bg-overlay {
@@ -378,7 +381,7 @@ function resetGame() {
       bgA.style.opacity = '1'; bgB.style.opacity = '0';
       activeLayer = 'a';
     }
-  }, 5000);
+  }, 60000);
 
   const music = document.getElementById('bg-music');
   let musicOn = true;

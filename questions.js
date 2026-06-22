@@ -4,7 +4,7 @@
 // ═══════════════════════════════════════════════════
 
 const QUIZ_CONFIG = {
-  timerSeconds: 20,
+  timerSeconds: 15,
   maxPoints: 1000,   // points si réponse immédiate
   minPoints: 500     // points minimum si réponse en toute fin de chrono
 };

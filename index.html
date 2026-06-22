@@ -129,8 +129,6 @@
 <div id="screen-reveal" class="screen">
   <div id="reveal-result"></div>
   <div class="correct-box" id="reveal-correct"></div>
-  <div class="score-plus" id="score-plus"></div>
-  <div class="score-big" id="score-big"></div>
   <div class="waiting" style="margin-top:10px">En attente de la prochaine question…</div>
 </div>
 
@@ -274,9 +272,6 @@ function showRevealScreen(game) {
     document.getElementById('reveal-result').innerHTML  = resultHTML;
     document.getElementById('reveal-correct').innerHTML =
       `✓ Bonne réponse : <strong>${labels[correct]}. ${q.options[correct]}</strong>`;
-    document.getElementById('score-plus').textContent =
-      myScore > prevScore ? `+${myScore - prevScore} pts` : '';
-    document.getElementById('score-big').textContent  = `Score : ${myScore} pts`;
   });
 }
 

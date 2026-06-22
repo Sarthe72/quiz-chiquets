@@ -261,13 +261,31 @@ function showRevealScreen(game) {
     const p       = s.val() || {};
     const myAns   = p.answers ? p.answers[game.questionIndex] : undefined;
     const correct = q.correct;
+    const phrasesOk = [
+      "T'étais là toi !",
+      "Meilleur invité de l'année 🏆",
+      "Tu dormais pas pendant le mariage !",
+      "Même le marié s'en souvient pas aussi bien",
+      "GPS activé ce jour-là",
+      "Chiquet·e certifié·e"
+    ];
+    const phrasesBad = [
+      "T'étais où ce jour-là ?!",
+      "Le champagne a tout effacé...",
+      "Même les mariés font mieux",
+      "Retourne voir les photos",
+      "Perdu·e comme un invité sans plan de table",
+      "C'est pour ça qu'on fait le déterrement"
+    ];
+    const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+
     let resultHTML = '';
     if (myAns === undefined) {
       resultHTML = '<div class="res-miss">⏰ Pas de réponse</div>';
     } else if (myAns === correct) {
-      resultHTML = '<div class="res-correct">✅ Bonne réponse !</div>';
+      resultHTML = `<div class="res-correct">✅ Bonne réponse !</div><div style="font-size:1.1rem;margin-top:8px;color:rgba(255,255,255,.8)">${pick(phrasesOk)}</div>`;
     } else {
-      resultHTML = '<div class="res-wrong">❌ Mauvaise réponse</div>';
+      resultHTML = `<div class="res-wrong">❌ Mauvaise réponse</div><div style="font-size:1.1rem;margin-top:8px;color:rgba(255,255,255,.8)">${pick(phrasesBad)}</div>`;
     }
     document.getElementById('reveal-result').innerHTML  = resultHTML;
     document.getElementById('reveal-correct').innerHTML =

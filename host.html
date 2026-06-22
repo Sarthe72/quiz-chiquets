@@ -7,6 +7,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="questions.js"></script>
+  <script src="photos.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -383,7 +384,7 @@ function resetGame() {
 
 <script>
   // ── Slideshow ──────────────────────────────────────
-  const PHOTOS = Array.from({length: 11}, (_, i) => `photos/p${String(i+1).padStart(2,'0')}.jpg`);
+  const PHOTOS = SLIDESHOW_PHOTOS;
   let photoIdx    = 0;
   let activeLayer = 'a';
   const bgA = document.getElementById('bg-a');
@@ -401,7 +402,7 @@ function resetGame() {
       bgA.style.opacity = '1'; bgB.style.opacity = '0';
       activeLayer = 'a';
     }
-  }, 60000);
+  }, 30000);
 
   const music = document.getElementById('bg-music');
   let musicOn = true;

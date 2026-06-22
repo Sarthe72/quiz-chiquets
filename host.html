@@ -186,6 +186,9 @@ let currentPlayers = {};
 let currentGame    = null;
 let timerInterval  = null;
 
+// Remet toujours au lobby à l'ouverture de host.html
+db.ref('/').set({ game: { status: 'waiting', questionIndex: 0 }, players: {} });
+
 // ── QR Code & player URL ──────────────────────────────
 const playerUrl = window.location.href.replace('host.html', 'index.html');
 document.getElementById('join-url').textContent = playerUrl;

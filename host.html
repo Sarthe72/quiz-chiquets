@@ -381,22 +381,33 @@ function resetGame() {
   }, 5000);
 
   const music = document.getElementById('bg-music');
-  let musicOn = false;
+  let musicOn = true;
+
+  // Autoplay : démarre muet (autorisé par les navigateurs), puis démute après 1s
+  music.muted = true;
+  music.play().then(() => {
+    setTimeout(() => { music.muted = false; }, 1000);
+  }).catch(() => {
+    // Si même muted est bloqué, on attend le premier clic
+    document.addEventListener('click', () => {
+      music.muted = false;
+      music.play().catch(() => {});
+    }, { once: true });
+  });
 
   function toggleMusic() {
-    if (!musicOn) {
-      music.play().then(() => {
-        musicOn = true;
-        document.getElementById('music-btn').textContent = '🔇';
-        const btn = document.getElementById('music-toggle-btn');
-        if (btn) { btn.textContent = '🔇 Couper la musique'; btn.style.background = '#374151'; }
-      }).catch(() => {});
-    } else {
+    if (musicOn) {
       music.pause();
       musicOn = false;
       document.getElementById('music-btn').textContent = '🎵';
       const btn = document.getElementById('music-toggle-btn');
       if (btn) { btn.textContent = '🎵 Lancer la musique'; btn.style.background = '#7c3aed'; }
+    } else {
+      music.play().catch(() => {});
+      musicOn = true;
+      document.getElementById('music-btn').textContent = '🔇';
+      const btn = document.getElementById('music-toggle-btn');
+      if (btn) { btn.textContent = '🔇 Couper la musique'; btn.style.background = '#374151'; }
     }
   }
 </script>

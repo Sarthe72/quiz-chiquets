@@ -64,7 +64,7 @@
     .btn-reset { background: #ef4444; color: #fff; font-size: .85rem; padding: 9px 20px; }
 
     /* ── question screen ── */
-    .q-meta { font-size: .9rem; color: rgba(255,255,255,.4); margin-bottom: 8px; }
+    .q-meta { font-size: 1.2rem; font-weight: 700; color: #fbbf24; background: rgba(0,0,0,.4); padding: 6px 18px; border-radius: 20px; margin-bottom: 12px; }
     .timer-row { display: flex; align-items: center; gap: 16px; width: 100%; max-width: 900px; margin-bottom: 20px; }
     .timer-num { font-size: 2.8rem; font-weight: 900; color: #fbbf24; min-width: 64px; text-align: center; }
     .timer-bar { flex: 1; height: 12px; background: rgba(255,255,255,.15); border-radius: 6px; overflow: hidden; }
@@ -311,10 +311,7 @@ function showRevealScreen(game) {
       updates[`players/${uid}/score`] = (p.score || 0) + pts;
     });
     if (Object.keys(updates).length) db.ref('/').update(updates);
-    document.getElementById('reveal-stats').innerHTML = `
-      <span class="stat-ok">✓ ${ok} bonne(s)</span>
-      <span class="stat-bad">✗ ${bad} fausse(s)</span>
-      <span class="stat-miss">— ${miss} sans réponse</span>`;
+    document.getElementById('reveal-stats').innerHTML = '';
     document.getElementById('correct-names').textContent =
       winners.length ? '👏 ' + winners.join(', ') : '';
   });

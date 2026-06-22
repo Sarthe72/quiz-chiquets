@@ -9,6 +9,21 @@
   <script src="questions.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── slideshow background ── */
+    .bg-layer {
+      position: fixed; inset: 0;
+      background-size: cover; background-position: center;
+      transition: opacity 1.5s ease;
+      z-index: 0;
+    }
+    .bg-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.62);
+      z-index: 1;
+    }
+    body > *:not(.bg-layer):not(.bg-overlay) { position: relative; z-index: 2; }
+
     body {
       font-family: 'Segoe UI', system-ui, sans-serif;
       background: #0d0d1a;
@@ -81,6 +96,11 @@
   </style>
 </head>
 <body>
+
+<!-- Slideshow background -->
+<div class="bg-layer" id="bg-a"></div>
+<div class="bg-layer" id="bg-b" style="opacity:0"></div>
+<div class="bg-overlay"></div>
 
 <!-- ══ LOBBY ══ -->
 <div id="screen-lobby" class="screen active">
@@ -339,6 +359,27 @@ function resetGame() {
   color:#fff;" title="Musique">🎵</button>
 
 <script>
+  // ── Slideshow ──────────────────────────────────────
+  const PHOTOS = Array.from({length: 11}, (_, i) => `photos/p${String(i+1).padStart(2,'0')}.jpg`);
+  let photoIdx    = 0;
+  let activeLayer = 'a';
+  const bgA = document.getElementById('bg-a');
+  const bgB = document.getElementById('bg-b');
+  bgA.style.backgroundImage = `url(${PHOTOS[0]})`;
+
+  setInterval(() => {
+    photoIdx = (photoIdx + 1) % PHOTOS.length;
+    if (activeLayer === 'a') {
+      bgB.style.backgroundImage = `url(${PHOTOS[photoIdx]})`;
+      bgB.style.opacity = '1'; bgA.style.opacity = '0';
+      activeLayer = 'b';
+    } else {
+      bgA.style.backgroundImage = `url(${PHOTOS[photoIdx]})`;
+      bgA.style.opacity = '1'; bgB.style.opacity = '0';
+      activeLayer = 'a';
+    }
+  }, 5000);
+
   const music = document.getElementById('bg-music');
   let musicOn = false;
 

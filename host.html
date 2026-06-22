@@ -331,12 +331,22 @@ function nextQuestion() {
 function showEndScreen() {
   clearInterval(timerInterval);
   showScreen('end');
-  const medals = ['🥇','🥈','🥉'];
-  const sorted = Object.values(currentPlayers).sort((a,b) => (b.score||0) - (a.score||0));
+  const medals  = ['🥇','🥈','🥉'];
+  const sorted  = Object.values(currentPlayers).sort((a,b) => (b.score||0) - (a.score||0));
+  const n       = sorted.length;
+  const phrases = (i) => {
+    if (i === 0)     return "Le vrai VIP de la soirée";
+    if (i === 1)     return "Si proche... et si loin";
+    if (i === 2)     return "Médaille de bronze, c'est déjà le champagne";
+    if (i === n - 1) return "T'es sûr·e d'être venu·e au mariage ?";
+    if (i === n - 2) return "Le buffet t'intéressait plus que la cérémonie";
+    if (i === n - 3) return "T'as dû dormir pendant la cérémonie";
+    return '';
+  };
   document.getElementById('leaderboard').innerHTML = sorted.map((p, i) => `
     <div class="lb-item ${i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : ''}">
       <span class="lb-rank">${medals[i] || (i+1)}</span>
-      <span class="lb-name">${p.name}</span>
+      <span class="lb-name">${p.name}${phrases(i) ? `<br><small style="font-weight:400;color:rgba(255,255,255,.55);font-size:.75rem">${phrases(i)}</small>` : ''}</span>
       <span class="lb-score">${p.score || 0} pts</span>
     </div>`).join('');
 }

@@ -235,6 +235,7 @@ function showScreen(name) {
 // ── Start / next ──────────────────────────────────────
 function startQuiz() {
   if (!confirm('Démarrer le quiz ?')) return;
+  startSlideshow();
   showScreen('intro');
   setTimeout(() => launchQuestion(0), 4000);
 }
@@ -394,13 +395,16 @@ function resetGame() {
 <script>
   // ── Slideshow ──────────────────────────────────────
   const PHOTOS = SLIDESHOW_PHOTOS;
-  let photoIdx    = 0;
-  let activeLayer = 'a';
+  let photoIdx      = 0;
+  let activeLayer   = 'a';
+  let slideshowInterval = null;
   const bgA = document.getElementById('bg-a');
   const bgB = document.getElementById('bg-b');
-  bgA.style.backgroundImage = `url(${PHOTOS[0]})`;
 
-  setInterval(() => {
+  // Photo fixe sur le lobby
+  bgA.style.backgroundImage = `url(photos/p01.jpg)`;
+
+  function nextSlide() {
     photoIdx = (photoIdx + 1) % PHOTOS.length;
     if (activeLayer === 'a') {
       bgB.style.backgroundImage = `url(${PHOTOS[photoIdx]})`;
@@ -411,7 +415,12 @@ function resetGame() {
       bgA.style.opacity = '1'; bgB.style.opacity = '0';
       activeLayer = 'a';
     }
-  }, 30000);
+  }
+
+  function startSlideshow() {
+    if (slideshowInterval) return;
+    slideshowInterval = setInterval(nextSlide, 20000);
+  }
 
   const music = document.getElementById('bg-music');
   let musicOn = true;

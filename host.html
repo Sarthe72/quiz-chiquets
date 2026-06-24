@@ -51,12 +51,12 @@
     .lobby-grid { display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; }
     #qrcode { background: white; padding: 14px; border-radius: 14px; }
     #qrcode img, #qrcode canvas { display: block; }
-    .join-label { font-size: 0.85rem; color: rgba(255,255,255,.5); text-transform: uppercase; letter-spacing: 1px; }
+    .join-label { font-size: 0.85rem; color: rgba(255,255,255,.5); text-transform: uppercase; letter-spacing: 1px; text-align: center; }
     .join-url { display: none; }
-    .players-wrap { background: rgba(255,255,255,.06); border-radius: 12px; padding: 14px; min-height: 80px; }
-    .players-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .players-wrap { background: rgba(255,255,255,.06); border-radius: 12px; padding: 14px; min-height: 80px; text-align: center; }
+    .players-grid { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
     .chip { background: rgba(255,255,255,.15); padding: 6px 14px; border-radius: 20px; font-size: .9rem; }
-    .player-count { color: rgba(255,255,255,.4); font-size: .85rem; margin-top: 8px; }
+    .player-count { color: rgba(255,255,255,.4); font-size: .85rem; margin-top: 8px; text-align: center; }
 
     /* ── buttons ── */
     .btn { padding: 13px 36px; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin: 6px; transition: opacity .15s; }
@@ -404,7 +404,7 @@ function resetGame() {
   const bgB = document.getElementById('bg-b');
 
   // Photo fixe sur le lobby
-  bgA.style.backgroundImage = `url(photos/p01.jpg)`;
+  bgA.style.backgroundImage = `url(photos/p06.jpg)`;
 
   function nextSlide() {
     photoIdx = (photoIdx + 1) % PHOTOS.length;

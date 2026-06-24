@@ -23,8 +23,9 @@
     }
     .bg-overlay {
       position: fixed; inset: 0;
-      background: rgba(0,0,0,0.62);
+      background: rgba(0,0,0,0.25);
       z-index: 1;
+      transition: background .5s;
     }
     body > *:not(.bg-layer):not(.bg-overlay) { position: relative; z-index: 2; }
 
@@ -235,6 +236,7 @@ function showScreen(name) {
 // ── Start / next ──────────────────────────────────────
 function startQuiz() {
   if (!confirm('Démarrer le quiz ?')) return;
+  document.querySelector('.bg-overlay').style.background = 'rgba(0,0,0,0.62)';
   startSlideshow();
   showScreen('intro');
   setTimeout(() => launchQuestion(0), 4000);

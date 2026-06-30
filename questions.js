@@ -12,38 +12,38 @@ const QUIZ_CONFIG = {
 
 const QUESTIONS = [
   {
-    question: "Combien y avait-il de témoins au mariage ?",
+    question: "Quel temps faisait-il ?",
+    options: ["Grand soleil", "Quelques nuages", "Pluie battante", "Orageux"],
+    correct: 0
+  },
+  {
+    question: "Combien de personnes y avait-il au mariage ?",
+    options: ["50", "80", "120", "150"],
+    correct: 2
+  },
+  {
+    question: "Nombre de discours ?",
     options: ["2", "4", "6", "8"],
     correct: 1
   },
   {
-    question: "Quelle était la couleur dominante de la décoration ?",
-    options: ["Blanc et or", "Bleu et blanc", "Rose et beige", "Vert et blanc"],
-    correct: 0
-  },
-  {
-    question: "Qui a attrapé le bouquet ?",
-    options: ["Marie", "Sophie", "Julie", "Camille"],
-    correct: 2
-  },
-  {
-    question: "Quel était le plat principal du menu ?",
-    options: ["Magret de canard", "Filet de bœuf", "Saumon en croûte", "Pintade rôtie"],
+    question: "Comment était la chemise du papa de la mariée ?",
+    options: ["Blanche classique", "À fleurs", "Bleu ciel", "Rayée"],
     correct: 1
   },
   {
-    question: "Quelle a été la première chanson de danse des mariés ?",
-    options: ["Perfect – Ed Sheeran", "All of Me – John Legend", "La Vie en Rose", "Can't Help Falling in Love"],
+    question: "Qu'est-ce qui était écrit sur la structure dans le jardin du domaine ?",
+    options: ["Les prénoms des mariés", "La date du mariage", "\"Love\"", "\"Mr & Mrs\""],
     correct: 0
   },
   {
-    question: "Qui est arrivé en retard ?",
-    options: ["Le père de la mariée", "Le DJ", "Le photographe", "Les parents du marié"],
-    correct: 2
+    question: "Quels étaient les rituels/animations de la cérémonie laïque ?",
+    options: ["Le sablier des sables mêlés", "La cérémonie des cadenas", "Le lâcher de ballons", "L'arbre à empreintes"],
+    correct: 0
   },
   {
-    question: "Combien de pièces montées / gâteaux y avait-il ?",
-    options: ["1", "2", "3", "4"],
-    correct: 1
+    question: "Qui était le maître de cérémonie ?",
+    options: ["Un des témoins", "Le père du marié", "Un ami du couple", "Un officiant professionnel"],
+    correct: 0
   }
 ];

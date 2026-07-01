@@ -310,11 +310,13 @@ function showRevealScreen(game) {
 
     // Sépare corrects et incorrects, trie les corrects par vitesse
     const correct = [];
+    let wrongCount  = 0;
+    let missedCount = 0;
     Object.entries(players).forEach(([uid, p]) => {
       const ans = p.answers ? p.answers[qi] : undefined;
-      if (ans === q.correct) {
-        correct.push({ uid, p, elapsed: (p.answerTime && p.answerTime[qi]) || 99999 });
-      }
+      if (ans === undefined)       missedCount++;
+      else if (ans === q.correct)  correct.push({ uid, p, elapsed: (p.answerTime && p.answerTime[qi]) || 99999 });
+      else                         wrongCount++;
     });
     correct.sort((a, b) => a.elapsed - b.elapsed);
 
@@ -332,7 +334,13 @@ function showRevealScreen(game) {
       ? '<strong style="color:#fbbf24">⚡ Plus rapides :</strong> ' +
         top3.map((e, i) => `${medals[i]} ${e.p.name}`).join('  ')
       : '';
-    document.getElementById('reveal-stats').innerHTML = '';
+
+    // Stats corrects / faux / sans réponse
+    const statParts = [];
+    if (correct.length) statParts.push(`<span class="stat-ok">✓ ${correct.length} correct${correct.length > 1 ? 's' : ''}</span>`);
+    if (wrongCount)     statParts.push(`<span class="stat-bad">✗ ${wrongCount} faux</span>`);
+    if (missedCount)    statParts.push(`<span class="stat-miss">— ${missedCount} sans réponse</span>`);
+    document.getElementById('reveal-stats').innerHTML = statParts.join('');
   });
 }
 
@@ -443,13 +451,13 @@ function resetGame() {
     if (musicOn) {
       music.pause();
       musicOn = false;
-      document.getElementById('music-btn').textContent = '🎵';
+      document.getElementById('music-btn').textContent = '🔇';
       const btn = document.getElementById('music-toggle-btn');
       if (btn) { btn.textContent = '🎵 Lancer la musique'; btn.style.background = '#7c3aed'; }
     } else {
       music.play().catch(() => {});
       musicOn = true;
-      document.getElementById('music-btn').textContent = '🔇';
+      document.getElementById('music-btn').textContent = '🎵';
       const btn = document.getElementById('music-toggle-btn');
       if (btn) { btn.textContent = '🔇 Couper la musique'; btn.style.background = '#374151'; }
     }

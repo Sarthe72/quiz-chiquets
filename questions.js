@@ -12,38 +12,103 @@ const QUIZ_CONFIG = {
 
 const QUESTIONS = [
   {
-    question: "Quel temps faisait-il ?",
-    options: ["Grand soleil", "Quelques nuages", "Pluie battante", "Orageux"],
+    question: "Quelle était la date complète du mariage ?",
+    options: ["02/07/2023", "01/07/2023", "02/07/2024", "01/07/2024"],
     correct: 0
   },
   {
-    question: "Combien de personnes y avait-il au mariage ?",
-    options: ["50", "80", "120", "150"],
+    question: "Quelle était la marque et la couleur de la voiture des mariés ?",
+    options: ["Mazda Rouge", "Ferrari Rouge", "Lamborghini jaune", "Chevrolet jaune"],
+    correct: 0
+  },
+  {
+    question: "Quels étaient les rituels de la cérémonie laïque ?",
+    options: ["bougies / rubans / pelote", "bougies / fleurs / pelote", "sable / rubans / pelote", "sable / fleurs / pelote"],
+    correct: 0
+  },
+  {
+    question: "Combien de discours y a-t-il eu à la cérémonie laïque ?",
+    options: ["3", "4", "5", "6"],
     correct: 2
   },
   {
-    question: "Nombre de discours ?",
-    options: ["2", "4", "6", "8"],
+    question: "Qui a attrapé le bouquet de la mariée ?",
+    options: ["Marine", "Amandine", "Alexia", "Julie"],
+    correct: 2
+  },
+  {
+    question: "Qui a attrapé la bouteille du marié ?",
+    options: ["Vincent", "Jérôme", "Melvin", "Romain"],
     correct: 1
   },
   {
-    question: "Comment était la chemise du papa de la mariée ?",
-    options: ["Blanche classique", "À fleurs", "Bleu ciel", "Rayée"],
+    question: "Quelle surprise, à l'initiative du caméraman, les invités ont-ils réalisé durant le vin d'honneur ?",
+    options: ["une chanson", "des blagues", "des photos rigolotes", "des interviews"],
+    correct: 3
+  },
+  {
+    question: "Sur quelle musique les mariés et les témoins ont-ils ouvert la réception ?",
+    options: ["\"Yeah\" – Usher", "\"Waka Waka\" – Shakira", "\"Give Me Everything\" – Pitbull", "\"Tout le bonheur du monde\" – Sinsemilia"],
+    correct: 2
+  },
+  {
+    question: "Combien d'animations ont été réalisées par la team témoin durant le repas ?",
+    options: ["2", "3", "4", "5"],
     correct: 1
   },
   {
-    question: "Qu'est-ce qui était écrit sur la structure dans le jardin du domaine ?",
-    options: ["Les prénoms des mariés", "La date du mariage", "\"Love\"", "\"Mr & Mrs\""],
+    question: "Quelle a été la destination du voyage de noce des mariés ?",
+    options: ["Grèce", "Tanzanie", "Cuba", "République dominicaine"],
+    correct: 1
+  },
+  {
+    question: "Quel était le dessert proposé au repas ?",
+    options: ["Assortiment de gâteaux", "Macarons", "Choux", "Fruits"],
     correct: 0
   },
   {
-    question: "Quels étaient les rituels/animations de la cérémonie laïque ?",
-    options: ["Le sablier des sables mêlés", "La cérémonie des cadenas", "Le lâcher de ballons", "L'arbre à empreintes"],
+    question: "Quel était le thème du mariage ?",
+    options: ["Bohème", "Champêtre", "Chic", "Romantique"],
+    correct: 1
+  },
+  {
+    question: "Quels ont été les derniers invités à se coucher ?",
+    options: ["Melvin / Romain / Pierre", "Benji / Melvin / Pierre", "Benji / Jess / Romain", "Jess / Camille / Alexia"],
     correct: 0
   },
   {
-    question: "Qui était le maître de cérémonie ?",
-    options: ["Un des témoins", "Le père du marié", "Un ami du couple", "Un officiant professionnel"],
+    question: "De quelle couleur était la robe des témoins de la mariée ?",
+    options: ["Bleue", "Rose", "Bordeaux", "Verte"],
+    correct: 2
+  },
+  {
+    question: "Qui a apporté les alliances lors de la cérémonie ?",
+    options: ["Clémence", "Juliette", "Océane", "Adèle"],
+    correct: 0
+  },
+  {
+    question: "Avec qui la mariée a-t-elle ouvert le bal ?",
+    options: ["Son parrain", "Son papa", "Son frère", "Son mari"],
+    correct: 1
+  },
+  {
+    question: "Qu'est-ce que les invités ont jeté aux mariés lors de la sortie de la mairie ?",
+    options: ["Des bulles", "Des pétales de rose", "Des confettis", "Des grains de riz"],
+    correct: 1
+  },
+  {
+    question: "Combien de temps a duré l'ouverture du bal ?",
+    options: ["10 min", "13 min", "15 min", "18 min"],
+    correct: 1
+  },
+  {
+    question: "Quel est le nom complet du lieu de la cérémonie ?",
+    options: ["Domaine de Bissé", "Domaine de la Courbe", "Domaine d'Authion", "Domaine Brissac"],
+    correct: 0
+  },
+  {
+    question: "Sans qui ce mariage n'aurait pas pu être une réussite ?",
+    options: ["La team des témoins", "La team des témoins", "La team des témoins", "La team des témoins"],
     correct: 0
   }
 ];

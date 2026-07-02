@@ -64,7 +64,7 @@ const QUESTIONS = [
   },
   {
     question: "Quel était le dessert proposé au repas ?",
-    options: ["assortiment de gâteaux", "macarons", "choux", "fruits"],
+    options: ["assortiment de gâteaux", "macarons", "choux", "Pièce Montée"],
     correct: 0
   },
   {

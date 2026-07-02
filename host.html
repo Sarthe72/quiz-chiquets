@@ -425,7 +425,7 @@ function showEndScreen() {
       ${vips.map((p, i) => `
         <div class="lb-item ${i === 0 ? 'r1' : i === 1 ? 'r2' : ''}">
           <span class="lb-rank">${medals[i] || (i+1)}</span>
-          <span class="lb-name">${p.name}</span>
+          <span class="lb-name">${p.name}<br><small style="font-weight:400;color:rgba(255,255,255,.55);font-size:.75rem">${i === 0 ? 'Le champion du couple 🏆' : 'Une buse... mais on l\'aime quand même 🪺'}</small></span>
           <span class="lb-score">${p.score || 0} pts</span>
         </div>`).join('')}
     </div>` : '';

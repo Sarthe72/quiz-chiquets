@@ -324,7 +324,7 @@ function showRevealScreen(game) {
 
     // Attribution des points
     correct.forEach(({ uid, p }, rank) => {
-      const bonus = rank < QUIZ_CONFIG.bonusCount ? QUIZ_CONFIG.pointsBonus : 0;
+      const bonus = q.noBonus ? 0 : (rank < QUIZ_CONFIG.bonusCount ? QUIZ_CONFIG.pointsBonus : 0);
       updates[`players/${uid}/score`] = (p.score || 0) + QUIZ_CONFIG.pointsCorrect + bonus;
     });
     if (Object.keys(updates).length) db.ref('/').update(updates);

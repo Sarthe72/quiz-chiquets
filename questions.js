@@ -110,6 +110,7 @@ const QUESTIONS = [
     question: "Sans qui ce mariage n'aurait pas pu être une réussite ?",
     options: ["La Team des témoins", "Les 4 fantastiques témoins", "Des personnes merveilleuses que l'on nomme témoins", "Melvin, on sait tous que sans lui les filles n'auraient pas faites grand chose."],
     correct: null,
+    noBonus: true,
     special: { 3: "Merci de reconnaitre la vérité" }
   }
 ];

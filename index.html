@@ -284,7 +284,9 @@ function showRevealScreen(game) {
     if (myAns === undefined) {
       resultHTML = '<div class="res-miss">⏰ Pas de réponse</div>';
     } else if (allCorrect || myAns === correct) {
-      resultHTML = `<div class="res-correct">✅ Bonne réponse !</div><div style="font-size:1.1rem;margin-top:8px;color:rgba(255,255,255,.8)">${pick(phrasesOk)}</div>`;
+      const specialMsg = q.special && myAns !== undefined && q.special[myAns];
+      const phrase = specialMsg || pick(phrasesOk);
+      resultHTML = `<div class="res-correct">✅ Bonne réponse !</div><div style="font-size:1.1rem;margin-top:8px;color:rgba(255,255,255,.8)">${phrase}</div>`;
     } else {
       resultHTML = `<div class="res-wrong">❌ Mauvaise réponse</div><div style="font-size:1.1rem;margin-top:8px;color:rgba(255,255,255,.8)">${pick(phrasesBad)}</div>`;
     }

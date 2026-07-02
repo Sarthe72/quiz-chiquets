@@ -79,8 +79,8 @@ const QUESTIONS = [
   },
   {
     question: "De quelle couleur était la robe des témoins de la mariée ?",
-    options: ["Bleue", "Rose", "Bordeaux", "Verte"],
-    correct: 2
+    options: ["Rose cannelle", "Jaune curry", "Bleue Curaçao", "Rouge safran"],
+    correct: 0
   },
   {
     question: "Qui a apporté les alliances lors de la cérémonie ?",

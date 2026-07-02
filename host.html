@@ -293,9 +293,10 @@ function showRevealScreen(game) {
   const q      = QUESTIONS[game.questionIndex];
   const labels = ['A','B','C','D'];
   document.getElementById('reveal-q').textContent = q.question;
+  const allCorrect = q.correct === null;
   document.getElementById('reveal-answers').innerHTML = q.options.map((opt, i) =>
-    `<div class="tile ${labels[i]} ${i === q.correct ? 'correct' : 'wrong'}">
-      ${i === q.correct ? '✓ ' : ''}${labels[i]}. ${opt}
+    `<div class="tile ${labels[i]} ${allCorrect || i === q.correct ? 'correct' : 'wrong'}">
+      ${allCorrect || i === q.correct ? '✓ ' : ''}${labels[i]}. ${opt}
     </div>`
   ).join('');
   const isLast = game.questionIndex >= QUESTIONS.length - 1;
@@ -312,11 +313,12 @@ function showRevealScreen(game) {
     const correct = [];
     let wrongCount  = 0;
     let missedCount = 0;
+    const allCorrect = q.correct === null;
     Object.entries(players).forEach(([uid, p]) => {
       const ans = p.answers ? p.answers[qi] : undefined;
-      if (ans === undefined)       missedCount++;
-      else if (ans === q.correct)  correct.push({ uid, p, elapsed: (p.answerTime && p.answerTime[qi]) || 99999 });
-      else                         wrongCount++;
+      if (ans === undefined)                          missedCount++;
+      else if (allCorrect || ans === q.correct)       correct.push({ uid, p, elapsed: (p.answerTime && p.answerTime[qi]) || 99999 });
+      else                                            wrongCount++;
     });
     correct.sort((a, b) => a.elapsed - b.elapsed);
 

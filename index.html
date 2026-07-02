@@ -279,17 +279,19 @@ function showRevealScreen(game) {
     ];
     const pick = arr => arr[Math.floor(Math.random() * arr.length)];
 
+    const allCorrect = correct === null;
     let resultHTML = '';
     if (myAns === undefined) {
       resultHTML = '<div class="res-miss">⏰ Pas de réponse</div>';
-    } else if (myAns === correct) {
+    } else if (allCorrect || myAns === correct) {
       resultHTML = `<div class="res-correct">✅ Bonne réponse !</div><div style="font-size:1.1rem;margin-top:8px;color:rgba(255,255,255,.8)">${pick(phrasesOk)}</div>`;
     } else {
       resultHTML = `<div class="res-wrong">❌ Mauvaise réponse</div><div style="font-size:1.1rem;margin-top:8px;color:rgba(255,255,255,.8)">${pick(phrasesBad)}</div>`;
     }
     document.getElementById('reveal-result').innerHTML  = resultHTML;
-    document.getElementById('reveal-correct').innerHTML =
-      `✓ Bonne réponse : <strong>${labels[correct]}. ${q.options[correct]}</strong>`;
+    document.getElementById('reveal-correct').innerHTML = allCorrect
+      ? '✓ Toutes les réponses étaient bonnes !'
+      : `✓ Bonne réponse : <strong>${labels[correct]}. ${q.options[correct]}</strong>`;
   });
 }
 

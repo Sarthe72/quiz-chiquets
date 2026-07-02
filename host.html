@@ -55,7 +55,8 @@
     .join-url { display: none; }
     .players-wrap { background: rgba(255,255,255,.06); border-radius: 12px; padding: 14px; min-height: 80px; text-align: center; }
     .players-grid { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-    .chip { background: rgba(255,255,255,.15); padding: 6px 14px; border-radius: 20px; font-size: .9rem; }
+    .chip { background: rgba(255,255,255,.15); padding: 6px 14px; border-radius: 20px; font-size: .9rem; cursor: pointer; user-select: none; }
+    .chip.vip { background: rgba(251,191,36,.25); border: 1px solid #fbbf24; color: #fbbf24; }
     .player-count { color: rgba(255,255,255,.4); font-size: .85rem; margin-top: 8px; text-align: center; }
 
     /* ── buttons ── */
@@ -160,6 +161,7 @@
 <div id="screen-end" class="screen">
   <div class="logo" style="margin-bottom:20px; font-size:2rem">🏆 Classement Final — Quizz Chiquet's</div>
   <div class="lb" id="leaderboard"></div>
+  <div id="vip-section"></div>
   <button class="btn btn-reset" onclick="resetGame()" style="margin-top:28px">↺ Rejouer</button>
 </div>
 
@@ -213,12 +215,21 @@ gameRef.on('value', snap => {
   else if (currentGame.status === 'end')      showEndScreen();
 });
 
+function toggleVip(uid, current) {
+  playersRef.child(uid).update({ vip: !current });
+}
+
 function refreshPlayerUI() {
-  const list  = Object.values(currentPlayers);
-  const chips = document.getElementById('players-chips');
-  const count = document.getElementById('player-count');
-  if (chips) chips.innerHTML = list.map(p => `<div class="chip">${p.name}</div>`).join('');
-  if (count) count.textContent = `${list.length} joueur(s)`;
+  const entries = Object.entries(currentPlayers);
+  const list    = entries.map(([,p]) => p);
+  const chips   = document.getElementById('players-chips');
+  const count   = document.getElementById('player-count');
+  if (chips) chips.innerHTML = entries.map(([uid, p]) =>
+    `<div class="chip ${p.vip ? 'vip' : ''}" onclick="toggleVip('${uid}', ${!!p.vip})" title="Cliquer pour marquer comme marié(e)">
+      ${p.name}${p.vip ? ' 💍' : ''}
+    </div>`
+  ).join('');
+  if (count) count.textContent = `${list.length} joueur(s) — cliquer sur un nom pour le marquer 💍 marié(e)`;
 
   if (currentGame && currentGame.status === 'question') {
     const qi       = currentGame.questionIndex;
@@ -388,8 +399,10 @@ function showEndScreen() {
   clearInterval(timerInterval);
   showScreen('end');
   const medals  = ['🥇','🥈','🥉'];
-  const sorted  = Object.values(currentPlayers).sort((a,b) => (b.score||0) - (a.score||0));
-  const n       = sorted.length;
+  const all     = Object.values(currentPlayers).sort((a,b) => (b.score||0) - (a.score||0));
+  const regular = all.filter(p => !p.vip);
+  const vips    = all.filter(p => p.vip);
+  const n       = regular.length;
   const phrases = (i) => {
     if (i === 0)     return "Le vrai VIP de la soirée";
     if (i === 1)     return "Si proche... et si loin";
@@ -399,12 +412,23 @@ function showEndScreen() {
     if (i === n - 3) return "T'as dû dormir pendant la cérémonie";
     return '';
   };
-  document.getElementById('leaderboard').innerHTML = sorted.map((p, i) => `
+  document.getElementById('leaderboard').innerHTML = regular.map((p, i) => `
     <div class="lb-item ${i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : ''}">
       <span class="lb-rank">${medals[i] || (i+1)}</span>
       <span class="lb-name">${p.name}${phrases(i) ? `<br><small style="font-weight:400;color:rgba(255,255,255,.55);font-size:.75rem">${phrases(i)}</small>` : ''}</span>
       <span class="lb-score">${p.score || 0} pts</span>
     </div>`).join('');
+
+  document.getElementById('vip-section').innerHTML = vips.length ? `
+    <div style="margin-top:32px; width:100%; max-width:640px;">
+      <div style="font-size:1.3rem; font-weight:700; color:#fbbf24; margin-bottom:12px; text-align:center">💍 Podium des Mariés</div>
+      ${vips.map((p, i) => `
+        <div class="lb-item ${i === 0 ? 'r1' : i === 1 ? 'r2' : ''}">
+          <span class="lb-rank">${medals[i] || (i+1)}</span>
+          <span class="lb-name">${p.name}</span>
+          <span class="lb-score">${p.score || 0} pts</span>
+        </div>`).join('')}
+    </div>` : '';
 }
 
 // ── Débloque le bouton Suivant ────────────────────────

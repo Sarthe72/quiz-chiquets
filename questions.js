@@ -69,7 +69,7 @@ const QUESTIONS = [
   },
   {
     question: "Quel était le thème du mariage ?",
-    options: ["bohème", "champêtre", "chic", "romantique"],
+    options: ["bohème", "champêtre", "chic", "Olympique Lyonnais"],
     correct: 1
   },
   {
@@ -94,7 +94,7 @@ const QUESTIONS = [
   },
   {
     question: "Qu'est-ce que les invités ont jeté aux mariés lors de la sortie de la mairie ?",
-    options: ["des bulles", "des pétales de rose", "des confettis", "des grains de riz"],
+    options: ["des Parpaings", "des pétales de rose", "des confettis", "des grains de riz"],
     correct: 1
   },
   {

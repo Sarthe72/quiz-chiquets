@@ -18,7 +18,7 @@ const QUESTIONS = [
   },
   {
     question: "Quelle était la marque et la couleur de la voiture des mariés ?",
-    options: ["Mazda Rouge", "Ferrari Rouge", "Lamborghini jaune", "Chevrolet jaune"],
+    options: ["Mazda rouge", "Ferrari rouge", "Lamborghini jaune", "Chevrolet jaune"],
     correct: 0
   },
   {
@@ -63,12 +63,12 @@ const QUESTIONS = [
   },
   {
     question: "Quel était le dessert proposé au repas ?",
-    options: ["Assortiment de gâteaux", "Macarons", "Choux", "Fruits"],
+    options: ["assortiment de gâteaux", "macarons", "choux", "fruits"],
     correct: 0
   },
   {
     question: "Quel était le thème du mariage ?",
-    options: ["Bohème", "Champêtre", "Chic", "Romantique"],
+    options: ["bohème", "champêtre", "chic", "romantique"],
     correct: 1
   },
   {
@@ -78,7 +78,7 @@ const QUESTIONS = [
   },
   {
     question: "De quelle couleur était la robe des témoins de la mariée ?",
-    options: ["Bleue", "Rose", "Bordeaux", "Verte"],
+    options: ["bleue", "rose", "bordeaux", "verte"],
     correct: 2
   },
   {
@@ -88,12 +88,12 @@ const QUESTIONS = [
   },
   {
     question: "Avec qui la mariée a-t-elle ouvert le bal ?",
-    options: ["Son parrain", "Son papa", "Son frère", "Son mari"],
+    options: ["son parrain", "son papa", "son frère", "son mari"],
     correct: 1
   },
   {
     question: "Qu'est-ce que les invités ont jeté aux mariés lors de la sortie de la mairie ?",
-    options: ["Des bulles", "Des pétales de rose", "Des confettis", "Des grains de riz"],
+    options: ["des bulles", "des pétales de rose", "des confettis", "des grains de riz"],
     correct: 1
   },
   {
@@ -108,7 +108,7 @@ const QUESTIONS = [
   },
   {
     question: "Sans qui ce mariage n'aurait pas pu être une réussite ?",
-    options: ["La team des témoins", "La team des témoins", "La team des témoins", "La team des témoins"],
+    options: ["la team des témoins", "la team des témoins", "la team des témoins", "la team des témoins"],
     correct: 0
   }
 ];

@@ -14,7 +14,7 @@ const QUESTIONS = [
   {
     question: "Quelle était la date complète du mariage ?",
     options: ["02/07/2023", "01/07/2023", "02/07/2024", "01/07/2024"],
-    correct: 0
+    correct: 1
   },
   {
     question: "Quelle était la marque et la couleur de la voiture des mariés ?",

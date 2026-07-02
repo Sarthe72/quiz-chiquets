@@ -115,6 +115,15 @@
   <div class="timer-bar"><div class="timer-fill" id="tf-q" style="width:100%"></div></div>
   <div class="q-text" id="q-text"></div>
   <div class="ans-grid" id="ans-grid"></div>
+  <div id="bonus-wrap" style="display:none; margin-top:16px; width:100%;">
+    <p id="bonus-label" style="font-size:.85rem; color:rgba(255,255,255,.6); margin-bottom:8px;"></p>
+    <div style="display:flex; gap:8px;">
+      <input type="text" id="bonus-text" placeholder="Tape ta réponse…" maxlength="40"
+        style="flex:1; padding:11px; font-size:1rem; border:2px solid rgba(255,255,255,.2); border-radius:10px; background:rgba(255,255,255,.1); color:#fff; outline:none;">
+      <button id="bonus-btn" onclick="submitBonus()"
+        style="padding:11px 16px; background:#fbbf24; color:#0d0d1a; border:none; border-radius:10px; font-weight:700; cursor:pointer;">OK</button>
+    </div>
+  </div>
 </div>
 
 <!-- ANSWERED -->
@@ -165,6 +174,7 @@ let hasAnswered    = false;
 let currentTimerEnd = 0;
 let myScore        = 0;
 let prevScore      = 0;
+let currentQI      = 0;
 
 // Auto-rejoin if we already have an identity
 if (myUid && myName) {
@@ -218,8 +228,9 @@ function onPlayersChange(snap) {
 // ── Question screen ───────────────────────────────────
 function showQuestionScreen(game) {
   clearInterval(timerInterval);
-  hasAnswered    = false;
+  hasAnswered     = false;
   currentTimerEnd = game.timerEnd;
+  currentQI       = game.questionIndex;
   showScreen('question');
   const q      = QUESTIONS[game.questionIndex];
   const labels = ['A','B','C','D'];
@@ -228,6 +239,19 @@ function showQuestionScreen(game) {
   document.getElementById('ans-grid').innerHTML = q.options.map((opt, i) =>
     `<button class="ans-btn ${labels[i]}" onclick="submitAnswer(${i}, ${game.questionIndex})">${labels[i]}. ${opt}</button>`
   ).join('');
+  const bonusWrap = document.getElementById('bonus-wrap');
+  const bonusText = document.getElementById('bonus-text');
+  const bonusBtn  = document.getElementById('bonus-btn');
+  if (q.bonusInput) {
+    document.getElementById('bonus-label').textContent = q.bonusInput;
+    bonusText.value    = '';
+    bonusText.disabled = false;
+    bonusBtn.disabled  = false;
+    bonusBtn.textContent = 'OK';
+    bonusWrap.style.display = 'block';
+  } else {
+    bonusWrap.style.display = 'none';
+  }
   startTimer(game.timerEnd, 'q-timer', ['tf-q', 'tf-wait'], () => {
     if (!hasAnswered) showScreen('answered');
   });
@@ -249,6 +273,16 @@ function submitAnswer(idx, qi) {
     [`answers/${qi}`]:    idx,
     [`answerTime/${qi}`]: elapsed
   });
+}
+
+// ── Bonus input ───────────────────────────────────────
+function submitBonus() {
+  const val = document.getElementById('bonus-text').value.trim();
+  if (!val || !myUid) return;
+  playersRef.child(myUid).update({ [`bonusAnswers/${currentQI}`]: val });
+  document.getElementById('bonus-text').disabled = true;
+  document.getElementById('bonus-btn').disabled  = true;
+  document.getElementById('bonus-btn').textContent = '✓';
 }
 
 // ── Reveal screen ─────────────────────────────────────

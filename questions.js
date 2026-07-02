@@ -19,7 +19,8 @@ const QUESTIONS = [
   {
     question: "Quelle était la marque et la couleur de la voiture des mariés ?",
     options: ["Mazda rouge", "Ferrari rouge", "Lamborghini jaune", "Chevrolet jaune"],
-    correct: 0
+    correct: 0,
+    bonusInput: "Tu connais le modèle exact ? (bonus)"
   },
   {
     question: "Quels étaient les rituels de la cérémonie laïque ?",

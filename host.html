@@ -152,6 +152,7 @@
   <div class="answers-grid" id="reveal-answers" style="max-width:900px; width:100%"></div>
   <div class="reveal-stats" id="reveal-stats"></div>
   <div class="correct-names" id="correct-names"></div>
+  <div id="bonus-section"></div>
   <button class="btn btn-next" id="btn-next" onclick="nextQuestion()">Suivant ➜</button>
 </div>
 
@@ -337,6 +338,26 @@ function showRevealScreen(game) {
         top3.map((e, i) => `${medals[i]} ${e.p.name}`).join('  ')
       : '';
 
+    // Bonus manuel
+    document.getElementById('bonus-section').innerHTML = '';
+    if (q.bonusInput) {
+      playersRef.once('value', snap => {
+        const allPlayers = snap.val() || {};
+        const entries = Object.entries(allPlayers)
+          .filter(([uid, p]) => p.bonusAnswers && p.bonusAnswers[qi] !== undefined);
+        if (!entries.length) return;
+        document.getElementById('bonus-section').innerHTML = `
+          <div style="margin-top:16px; font-size:1rem; color:#fbbf24; font-weight:700">🎁 Bonus modèle exact</div>
+          ${entries.map(([uid, p]) => `
+            <div style="display:flex; align-items:center; gap:10px; margin-top:8px; background:rgba(255,255,255,.08); padding:8px 14px; border-radius:8px;">
+              <span style="flex:1"><strong>${p.name}</strong> : "${p.bonusAnswers[qi]}"</span>
+              <button onclick="awardBonus('${uid}', this)" style="background:#22c55e; color:#fff; border:none; border-radius:6px; padding:6px 14px; font-weight:700; cursor:pointer;">+1 pt</button>
+            </div>
+          `).join('')}
+        `;
+      });
+    }
+
     // Stats corrects / faux / sans réponse
     const statParts = [];
     if (correct.length) statParts.push(`<span class="stat-ok">✓ ${correct.length} correct${correct.length > 1 ? 's' : ''}</span>`);
@@ -378,6 +399,14 @@ function showEndScreen() {
       <span class="lb-name">${p.name}${phrases(i) ? `<br><small style="font-weight:400;color:rgba(255,255,255,.55);font-size:.75rem">${phrases(i)}</small>` : ''}</span>
       <span class="lb-score">${p.score || 0} pts</span>
     </div>`).join('');
+}
+
+// ── Bonus manuel ──────────────────────────────────────
+function awardBonus(uid, btn) {
+  db.ref(`players/${uid}/score`).transaction(score => (score || 0) + 1);
+  btn.disabled     = true;
+  btn.textContent  = '✓';
+  btn.style.background = '#6b7280';
 }
 
 // ── Reset ─────────────────────────────────────────────

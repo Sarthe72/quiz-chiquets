@@ -74,7 +74,7 @@ const QUESTIONS = [
   },
   {
     question: "Quels ont été les derniers invités à se coucher ?",
-    options: ["Melvin / Romain / Pierre", "Benji / Melvin / Pierre", "Benji / Jess / Romain", "Jess / Camille / Alexia"],
+    options: ["Yoan, Melvin, Romain & Pierre", "Vincent, Mon grand Benjam & Fabien", "Delphine, Jessica, Alexia & Camille", "Maryse & Djamila, INARRETABLES !!!!!"],
     correct: 0
   },
   {

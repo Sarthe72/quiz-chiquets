@@ -18,13 +18,13 @@ const QUESTIONS = [
   },
   {
     question: "Quelle était la marque et la couleur de la voiture des mariés ?",
-    options: ["Mazda rouge", "Ferrari rouge", "Lamborghini jaune", "Chevrolet jaune"],
-    correct: 0,
+    options: ["Ferrari rouge", "Mazda rouge", "Lamborghini jaune", "Chevrolet jaune"],
+    correct: 1,
     bonusInput: "Tu connais le modèle exact ? (bonus)"
   },
   {
     question: "Quels étaient les rituels de la cérémonie laïque ?",
-    options: ["bougies / rubans / pelote", "bougies / fleurs / pelote", "sable / rubans / pelote", "sable / fleurs / pelote"],
+    options: ["Bougies / rubans / pelote", "Bougies / fleurs / pelote", "Sable / rubans / pelote", "Sable / fleurs / pelote"],
     correct: 0
   },
   {
@@ -44,7 +44,7 @@ const QUESTIONS = [
   },
   {
     question: "Quelle surprise, à l'initiative du caméraman, les invités ont-ils réalisé durant le vin d'honneur ?",
-    options: ["une chanson", "des blagues", "un calendrier mode les dieux du stade", "des interviews"],
+    options: ["Une chanson", "Des blagues", "Un calendrier mode les dieux du stade", "Des interviews"],
     correct: 3
   },
   {
@@ -64,12 +64,12 @@ const QUESTIONS = [
   },
   {
     question: "Quel était le dessert proposé au repas ?",
-    options: ["assortiment de gâteaux", "macarons", "choux", "Pièce Montée"],
+    options: ["Assortiment de gâteaux", "Macarons", "Choux", "Pièce Montée"],
     correct: 0
   },
   {
     question: "Quel était le thème du mariage ?",
-    options: ["bohème", "champêtre", "chic", "Olympique Lyonnais"],
+    options: ["Bohème", "Champêtre", "Chic", "Olympique Lyonnais"],
     correct: 1
   },
   {
@@ -79,7 +79,7 @@ const QUESTIONS = [
   },
   {
     question: "De quelle couleur était la robe des témoins de la mariée ?",
-    options: ["bleue", "rose", "bordeaux", "verte"],
+    options: ["Bleue", "Rose", "Bordeaux", "Verte"],
     correct: 2
   },
   {
@@ -89,12 +89,12 @@ const QUESTIONS = [
   },
   {
     question: "Avec qui la mariée a-t-elle ouvert le bal ?",
-    options: ["son parrain", "son papa", "son frère", "son mari"],
+    options: ["Son parrain", "Son papa", "Son frère", "Son mari"],
     correct: 1
   },
   {
     question: "Qu'est-ce que les invités ont jeté aux mariés lors de la sortie de la mairie ?",
-    options: ["des Parpaings", "des pétales de rose", "des confettis", "des grains de riz"],
+    options: ["Des Parpaings", "Des pétales de rose", "Des confettis", "Des grains de riz"],
     correct: 1
   },
   {

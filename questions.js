@@ -44,7 +44,7 @@ const QUESTIONS = [
   },
   {
     question: "Quelle surprise, à l'initiative du caméraman, les invités ont-ils réalisé durant le vin d'honneur ?",
-    options: ["Une chanson", "Des blagues", "Un calendrier mode les dieux du stade", "Des interviews"],
+    options: ["Une chanson", "Des blagues", "Calendrier esprit « Les Dieux du Stade »", "Des interviews"],
     correct: 3
   },
   {

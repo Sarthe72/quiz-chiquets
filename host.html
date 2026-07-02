@@ -301,7 +301,10 @@ function showRevealScreen(game) {
     </div>`
   ).join('');
   const isLast = game.questionIndex >= QUESTIONS.length - 1;
-  document.getElementById('btn-next').textContent = isLast ? 'Voir le classement 🏆' : 'Suivant ➜';
+  const btnNext = document.getElementById('btn-next');
+  btnNext.textContent = isLast ? 'Voir le classement 🏆' : 'Suivant ➜';
+  btnNext.disabled    = !!q.bonusInput;
+  btnNext.style.opacity = q.bonusInput ? '0.35' : '1';
 
   // Score once per question via transaction
   const qi = game.questionIndex;
@@ -354,8 +357,11 @@ function showRevealScreen(game) {
               <button onclick="awardBonus('${uid}', this)" style="background:#22c55e; color:#fff; border:none; border-radius:6px; padding:6px 14px; font-weight:700; cursor:pointer;">+1 pt</button>
             </div>
           `).join('')}
+          <button onclick="unlockNext()" style="margin-top:14px; background:#3b82f6; color:#fff; border:none; border-radius:8px; padding:10px 24px; font-weight:700; cursor:pointer;">Bonus traités ✓</button>
         `;
       });
+    } else {
+      unlockNext();
     }
 
     // Stats corrects / faux / sans réponse
@@ -399,6 +405,15 @@ function showEndScreen() {
       <span class="lb-name">${p.name}${phrases(i) ? `<br><small style="font-weight:400;color:rgba(255,255,255,.55);font-size:.75rem">${phrases(i)}</small>` : ''}</span>
       <span class="lb-score">${p.score || 0} pts</span>
     </div>`).join('');
+}
+
+// ── Débloque le bouton Suivant ────────────────────────
+function unlockNext() {
+  const btn = document.getElementById('btn-next');
+  btn.disabled      = false;
+  btn.style.opacity = '1';
+  const unl = document.querySelector('#bonus-section button[onclick="unlockNext()"]');
+  if (unl) { unl.textContent = '✓ Validé'; unl.disabled = true; unl.style.background = '#6b7280'; }
 }
 
 // ── Bonus manuel ──────────────────────────────────────
